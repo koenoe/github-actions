@@ -27,5 +27,5 @@ jobs:
       - name: Upload README.txt
         uses: actions/upload-artifact@v2-preview
         with:
-          name: readme.txt
-          path: dist/readme.txt
+          name: README.txt
+          path: dist/README.txt
