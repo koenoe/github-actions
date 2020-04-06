@@ -34,7 +34,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "eu-west-3"
           SOURCE_DIR: "dist"
-          DEST_DIR: "dist/$GITHUB_RUN_NUMBER"
+          DEST_DIR: "builds/$GITHUB_RUN_NUMBER"
       # - name: Upload README.txt
       #   uses: actions/upload-artifact@v2-preview
       #   with:
