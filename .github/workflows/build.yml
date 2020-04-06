@@ -21,11 +21,11 @@ jobs:
       - name: Create folder
         run: mkdir -p "dist"
 
-      - name: Generate file
-        run: echo "hello world"  > dist/hello_world.txt
+      - name: Generate README.txt
+        run: cat README.md  > dist/readme.txt
 
-      - name: Upload our generated file
+      - name: Upload README.txt
         uses: actions/upload-artifact@v1
         with:
-          name: hello_world.txt
-          path: dist/hello_world.txt
+          name: readme.txt
+          path: dist/readme.txt
