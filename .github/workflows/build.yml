@@ -22,10 +22,10 @@ jobs:
         run: mkdir -p "dist"
 
       - name: Generate README.txt
-        run: cat README.md  > dist/readme.txt
+        run: cat README.md  > dist/README.txt
 
       - name: Upload README.txt
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2-preview
         with:
           name: readme.txt
           path: dist/readme.txt
