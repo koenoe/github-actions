@@ -19,7 +19,7 @@ jobs:
           ref: develop
 
       - name: Generate file
-        run: echo hello world  > dist/hello_world.txt
+        run: echo "hello world"  > dist/hello_world.txt
 
       - name: Upload our generated file
         uses: actions/upload-artifact@v1
