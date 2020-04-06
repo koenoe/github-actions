@@ -18,6 +18,9 @@ jobs:
         with:
           ref: develop
 
+      - name: Create folder
+        run: mkdir -p "dist"
+
       - name: Generate file
         run: echo "hello world"  > dist/hello_world.txt
 
