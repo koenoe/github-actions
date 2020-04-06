@@ -1,0 +1,28 @@
+name: build
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+
+      - name: Generate file
+        run: echo hello world  > dist/hello_world.txt
+
+      - name: Upload our generated file
+        uses: actions/upload-artifact@v1
+        with:
+          name: hello_world.txt
+          path: dist/hello_world.txt
