@@ -24,8 +24,8 @@ jobs:
         with:
           path: ./version.json
 
-      - name: Echo version
-        run: echo ${{ steps.package.outputs.content }}
+      - name: Echo app version
+        run: echo ${{ steps.package.outputs.content.appVersion }}
       # - name: Create folder
       #   run: mkdir -p "dist"
       # - name: Generate README.txt
