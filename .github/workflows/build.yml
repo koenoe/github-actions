@@ -18,12 +18,11 @@ jobs:
         with:
           ref: develop
 
-      - name: Read version.json
-        id: version
-        run: jq -rc .appVersion version.json
+      - name: Set app version variable
+        run: echo ::set-env name=APP_VERSION::$(jq -rc .appVersion version.json)
 
       - name: Echo app version
-        run: echo ${{ steps.version.outputs }}
+        run: echo $APP_VERSION
       # - name: Create folder
       #   run: mkdir -p "dist"
       # - name: Generate README.txt
