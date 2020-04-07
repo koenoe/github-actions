@@ -26,18 +26,20 @@ jobs:
           aws-region: eu-west-3
 
       - name: Set app version variable
-        run: echo ::set-env name=APP_VERSION::$(jq -rc .appVersion version.json)
+        run: |
+          echo ::set-env name=APP_VERSION::$(jq -rc .appVersion version.json)
 
       - name: Create folder
-        run: mkdir -p "dist"
+        run: |
+          mkdir -p "dist"
 
       - name: Generate README.txt
-        run: cat README.md  > dist/README.txt
+        run: |
+          cat README.md  > dist/README.txt
 
       - name: Upload README.txt to S3
-        run: aws s3 sync dist s3://koenoe/builds/$APP_VERSION
-        with:
-          args: --acl public-read --follow-symlinks --delete
+        run: |
+          aws s3 sync dist s3://koenoe/builds/$APP_VERSION --acl public-read --follow-symlinks --delete
 
       - name: Upload README.txt as artifact
         uses: actions/upload-artifact@v2-preview
