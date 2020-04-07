@@ -39,7 +39,7 @@ jobs:
 
       - name: Upload README.txt to S3
         run: |
-          aws s3 sync dist s3://koenoe/builds/$APP_VERSION --acl public-read --follow-symlinks --delete
+          aws s3 sync dist s3://koenoe/builds/v$APP_VERSION --acl public-read --follow-symlinks --delete
 
       - name: Upload README.txt as artifact
         uses: actions/upload-artifact@v2-preview
