@@ -18,26 +18,28 @@ jobs:
         with:
           ref: develop
 
-      - name: Create folder
-        run: mkdir -p "dist"
-
-      - name: Generate README.txt
-        run: cat README.md  > dist/README.txt
-
-      - name: Upload README.txt to S3
-        uses: jakejarvis/s3-sync-action@master
+      - name: Read version.json
+        id: package
+        uses: juliangruber/read-file-action@v1
         with:
-          args: --acl public-read --follow-symlinks --delete
-        env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "eu-west-3"
-          SOURCE_DIR: "dist"
-          DEST_DIR: "builds/$GITHUB_RUN_NUMBER"
+          path: ./version.json
 
-      - name: Upload README.txt as artifact
-        uses: actions/upload-artifact@v2-preview
-        with:
-          name: README.txt
-          path: dist/README.txt
+      - name: Echo version
+        run: echo ${{ steps.package.outputs.content }}
+      # - name: Create folder
+      #   run: mkdir -p "dist"
+      # - name: Generate README.txt
+      #   run: cat README.md  > dist/README.txt
+      # - name: Upload README.txt to S3
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   run: aws s3 sync dist s3://koenoe/builds/${{ steps.package.outputs.content }}
+      #   with:
+      #     args: --acl public-read --follow-symlinks --delete
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: eu-west-3
+      # - name: Upload README.txt as artifact
+      #   uses: actions/upload-artifact@v2-preview
+      #   with:
+      #     name: README.txt
+      #     path: dist/README.txt
