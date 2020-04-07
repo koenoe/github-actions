@@ -19,13 +19,11 @@ jobs:
           ref: develop
 
       - name: Read version.json
-        id: package
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./version.json
+        id: version
+        run: echo cat ./version.json | jq '.appVersion'
 
       - name: Echo app version
-        run: echo ${{ steps.package.outputs.content.appVersion }}
+        run: echo ${{ steps.version.outputs }}
       # - name: Create folder
       #   run: mkdir -p "dist"
       # - name: Generate README.txt
