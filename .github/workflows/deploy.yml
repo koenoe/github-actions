@@ -21,6 +21,6 @@ jobs:
         run: |
           echo ::set-env name=VERSION::${GITHUB_REF/refs\/tags\//}
 
-      - name: Echo the version
+      - name: Copy build to production
         run: |
-          echo $VERSION
+          aws s3 cp s3://koenoe/builds/$VERSION s3://koenoe --acl public-read --follow-symlinks
