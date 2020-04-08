@@ -37,7 +37,7 @@ jobs:
         run: |
           cat README.md  > dist/README.txt
 
-      - name: Upload README.txt to S3
+      - name: Upload dist to S3
         run: |
           aws s3 sync dist s3://koenoe/builds/v$APP_VERSION --acl public-read --follow-symlinks --delete
 
