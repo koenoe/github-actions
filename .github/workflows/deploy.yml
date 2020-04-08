@@ -23,4 +23,4 @@ jobs:
 
       - name: Copy build to production
         run: |
-          aws s3 cp s3://koenoe/builds/$VERSION s3://koenoe --recursive --acl public-read --follow-symlinks
+          aws s3 cp s3://koenoe/builds/$VERSION s3://koenoe --recursive --acl public-read --follow-symlinks --cache-control max-age=300
