@@ -1,5 +1,11 @@
 name: build
 
+env:
+  AWS_BUCKET: koenoe
+  AWS_DEFAULT_REGION: eu-west-3
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 on:
   push:
     branches:
@@ -21,9 +27,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-3
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
       - name: Set app version variable
         run: |
@@ -33,16 +39,59 @@ jobs:
         run: |
           mkdir -p "dist"
 
-      - name: Generate README.txt
+      - name: Generate TIDAL.exe
         run: |
-          cat README.md  > dist/README.txt
+          echo "hoi TIDAL.exe" > dist/TIDAL.exe
 
-      - name: Upload dist to S3
+      - name: Generate RELEASES
         run: |
-          aws s3 sync dist s3://koenoe/builds/v$APP_VERSION --acl public-read --follow-symlinks --delete
+          echo "hoi RELEASES" > dist/RELEASES
 
-      - name: Upload README.txt as artifact
+      - name: Generate TIDAL.nupkg
+        run: |
+          echo "hoi TIDAL.nupkg" > dist/TIDAL-2.0.0-full.nupkg
+
+      - name: Generate TIDAL.appx
+        run: |
+          echo "hoi TIDAL.appx" > dist/TIDAL.appx
+
+      - name: Generate TIDAL.dmg
+        run: |
+          echo "hoi TIDAL.dmg" > dist/TIDAL.dmg
+
+      - name: Generate TIDAL.zip
+        run: |
+          echo "hoi TIDAL.zip" > dist/TIDAL.zip
+
+      - name: Upload 'TIDAL.exe' to S3
+        run: |
+          aws s3 cp dist/TIDAL.exe s3://$AWS_BUCKET/builds/v$APP_VERSION/TIDAL.exe --acl public-read --follow-symlinks
+        shell: bash
+
+      - name: Upload 'TIDAL.appx' to S3
+        run: |
+          aws s3 cp dist/TIDAL.appx s3://$AWS_BUCKET/builds/v$APP_VERSION/TIDAL.appx --acl public-read --follow-symlinks
+        shell: bash
+
+      - name: Upload 'TIDAL.nupkg' to S3
+        run: |
+          aws s3 cp dist s3://$AWS_BUCKET/builds/v$APP_VERSION --exclude "*" --include "*.nupkg" --recursive --acl public-read --follow-symlinks
+
+      - name: Upload 'RELEASES' to S3
+        run: |
+          aws s3 cp dist/RELEASES s3://$AWS_BUCKET/builds/v$APP_VERSION/RELEASES --acl public-read --follow-symlinks
+        shell: bash
+
+      - name: Upload 'TIDAL.dmg' and 'TIDAL.zip' to S3
+        run: |
+          aws s3 cp dist s3://$AWS_BUCKET/builds/v$APP_VERSION --exclude "*" --include "*.dmg" --include "*.zip" --recursive --acl public-read --follow-symlinks
+
+      - name: Upload 'version.json' to S3
+        run: |
+          aws s3 cp version.json s3://$AWS_BUCKET/builds/v$APP_VERSION/version.json --acl public-read --follow-symlinks
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v2-preview
         with:
-          name: README.txt
-          path: dist/README.txt
+          name: DIST
+          path: dist/*
