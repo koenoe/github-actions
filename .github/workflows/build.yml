@@ -49,7 +49,7 @@ jobs:
 
       - name: Generate TIDAL.nupkg
         run: |
-          echo "hoi TIDAL.nupkg" > dist/TIDAL-2.0.0-full.nupkg
+          echo "hoi TIDAL.nupkg" > dist/TIDAL-$APP_VERSION-full.nupkg
 
       - name: Generate TIDAL.appx
         run: |
