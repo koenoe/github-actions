@@ -35,6 +35,6 @@ jobs:
       - name: Deploy for auto update
         run: |
           aws s3 cp s3://$AWS_BUCKET/builds/$VERSION s3://$AWS_BUCKET/desktop/windows --exclude "*" --include "*.nupkg" --recursive
-          aws s3 cp s3://$AWS_BUCKET/builds/$VERSION/TIDAL.zip s3://$AWS_BUCKET/desktop/osx/TIDAL.$VERSION.zip
+          aws s3 cp s3://$AWS_BUCKET/builds/$VERSION/TIDAL.zip s3://$AWS_BUCKET/desktop/osx/TIDAL.${VERSION:1}.zip
           aws s3 cp s3://$AWS_BUCKET/builds/$VERSION/RELEASES s3://$AWS_BUCKET/desktop/windows/RELEASES --cache-control max-age=300
           aws s3 cp s3://$AWS_BUCKET/builds/$VERSION/version.json s3://$AWS_BUCKET/desktop/osx/version.json --cache-control max-age=300
