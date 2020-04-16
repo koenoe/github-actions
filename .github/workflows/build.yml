@@ -65,30 +65,30 @@ jobs:
 
       - name: Upload 'TIDAL.exe' to S3
         run: |
-          aws s3 cp dist/TIDAL.exe s3://$AWS_BUCKET/builds/v$APP_VERSION/TIDAL.exe --acl public-read --follow-symlinks
+          aws s3 cp dist/TIDAL.exe s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA/TIDAL.exe --acl public-read --follow-symlinks
         shell: bash
 
       - name: Upload 'TIDAL.appx' to S3
         run: |
-          aws s3 cp dist/TIDAL.appx s3://$AWS_BUCKET/builds/v$APP_VERSION/TIDAL.appx --acl public-read --follow-symlinks
+          aws s3 cp dist/TIDAL.appx s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA/TIDAL.appx --acl public-read --follow-symlinks
         shell: bash
 
       - name: Upload 'TIDAL.nupkg' to S3
         run: |
-          aws s3 cp dist s3://$AWS_BUCKET/builds/v$APP_VERSION --exclude "*" --include "*.nupkg" --recursive --acl public-read --follow-symlinks
+          aws s3 cp dist s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA --exclude "*" --include "*.nupkg" --recursive --acl public-read --follow-symlinks
 
       - name: Upload 'RELEASES' to S3
         run: |
-          aws s3 cp dist/RELEASES s3://$AWS_BUCKET/builds/v$APP_VERSION/RELEASES --acl public-read --follow-symlinks
+          aws s3 cp dist/RELEASES s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA/RELEASES --acl public-read --follow-symlinks
         shell: bash
 
       - name: Upload 'TIDAL.dmg' and 'TIDAL.zip' to S3
         run: |
-          aws s3 cp dist s3://$AWS_BUCKET/builds/v$APP_VERSION --exclude "*" --include "*.dmg" --include "*.zip" --recursive --acl public-read --follow-symlinks
+          aws s3 cp dist s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA --exclude "*" --include "*.dmg" --include "*.zip" --recursive --acl public-read --follow-symlinks
 
       - name: Upload 'version.json' to S3
         run: |
-          aws s3 cp version.json s3://$AWS_BUCKET/builds/v$APP_VERSION/version.json --acl public-read --follow-symlinks
+          aws s3 cp version.json s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA/version.json --acl public-read --follow-symlinks
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2-preview
