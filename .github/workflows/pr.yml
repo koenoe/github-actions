@@ -1,0 +1,31 @@
+name: pr
+
+env:
+  AWS_BUCKET: koenoe
+  AWS_DEFAULT_REGION: eu-west-3
+  AWS_BUILD_FOLDER: desktop-builds
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  add-comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set app version variable
+        run: |
+          echo ::set-env name=APP_VERSION::$(jq -rc .version package.json)
+
+      - name: Generate comment to PR with links to S3 artifacts
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: "# Artifacts \n - [TIDAL.dmg](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ env.GITHUB_SHA }}TIDAL.dmg) \n - [TIDAL.exe](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ env.GITHUB_SHA }}TIDAL.exe) \n - [TIDAL.appx](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ env.GITHUB_SHA }}TIDAL.appx) \n - [TIDAL.zip](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ env.GITHUB_SHA }}TIDAL.zip) \n - [TIDAL-${{ env.APP_VERSION }}-full.nupkg](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ env.GITHUB_SHA }}TIDAL-${{ env.APP_VERSION }}-full.nupkg) \n - [version.json](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ env.GITHUB_SHA }}version.json) \n - [RELEASES](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ env.GITHUB_SHA }}RELEASES)"
+          check_for_duplicate_msg: true

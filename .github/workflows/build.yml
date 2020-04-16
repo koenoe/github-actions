@@ -5,6 +5,7 @@ env:
   AWS_DEFAULT_REGION: eu-west-3
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_BUILD_FOLDER: desktop-builds
 
 on:
   push:
@@ -21,8 +22,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: develop
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -65,30 +64,27 @@ jobs:
 
       - name: Upload 'TIDAL.exe' to S3
         run: |
-          aws s3 cp dist/TIDAL.exe s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA/TIDAL.exe --acl public-read --follow-symlinks
-        shell: bash
+          aws s3 cp dist/TIDAL.exe s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$APP_VERSION/$GITHUB_SHA/TIDAL.exe --acl public-read --follow-symlinks
 
       - name: Upload 'TIDAL.appx' to S3
         run: |
-          aws s3 cp dist/TIDAL.appx s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA/TIDAL.appx --acl public-read --follow-symlinks
-        shell: bash
+          aws s3 cp dist/TIDAL.appx s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$APP_VERSION/$GITHUB_SHA/TIDAL.appx --acl public-read --follow-symlinks
 
       - name: Upload 'TIDAL.nupkg' to S3
         run: |
-          aws s3 cp dist s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA --exclude "*" --include "*.nupkg" --recursive --acl public-read --follow-symlinks
+          aws s3 cp dist s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$APP_VERSION/$GITHUB_SHA --exclude "*" --include "*.nupkg" --recursive --acl public-read --follow-symlinks
 
       - name: Upload 'RELEASES' to S3
         run: |
-          aws s3 cp dist/RELEASES s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA/RELEASES --acl public-read --follow-symlinks
-        shell: bash
+          aws s3 cp dist/RELEASES s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$APP_VERSION/$GITHUB_SHA/RELEASES --acl public-read --follow-symlinks
 
       - name: Upload 'TIDAL.dmg' and 'TIDAL.zip' to S3
         run: |
-          aws s3 cp dist s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA --exclude "*" --include "*.dmg" --include "*.zip" --recursive --acl public-read --follow-symlinks
+          aws s3 cp dist s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$APP_VERSION/$GITHUB_SHA --exclude "*" --include "*.dmg" --include "*.zip" --recursive --acl public-read --follow-symlinks
 
       - name: Upload 'version.json' to S3
         run: |
-          aws s3 cp version.json s3://$AWS_BUCKET/builds/v$APP_VERSION/$GITHUB_SHA/version.json --acl public-read --follow-symlinks
+          aws s3 cp version.json s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$APP_VERSION/$GITHUB_SHA/version.json --acl public-read --follow-symlinks
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2-preview

@@ -2,9 +2,10 @@ name: deploy
 
 env:
   AWS_BUCKET: koenoe
-  AWS_DEFAULT_REGION: eu-west-3
+  AWS_DEFAULT_REGION: eu-wes
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_BUILD_FOLDER: desktop-builds
 
 on:
   push:
@@ -32,12 +33,12 @@ jobs:
 
       - name: Deploy for new users
         run: |
-          aws s3 cp s3://$AWS_BUCKET/builds/v$VERSION/$GITHUB_SHA/TIDAL.exe s3://$AWS_BUCKET/desktop/TIDALSetup.exe --cache-control max-age=3600
-          aws s3 cp s3://$AWS_BUCKET/builds/v$VERSION/$GITHUB_SHA/TIDAL.dmg s3://$AWS_BUCKET/desktop/TIDAL.dmg --cache-control max-age=3600
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/TIDAL.exe s3://$AWS_BUCKET/desktop/TIDALSetup.exe --cache-control max-age=3600
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/TIDAL.dmg s3://$AWS_BUCKET/desktop/TIDAL.dmg --cache-control max-age=3600
 
       - name: Deploy for auto update
         run: |
-          aws s3 cp s3://$AWS_BUCKET/builds/v$VERSION s3://$AWS_BUCKET/desktop/windows --exclude "*" --include "*.nupkg" --recursive
-          aws s3 cp s3://$AWS_BUCKET/builds/v$VERSION/$GITHUB_SHA/TIDAL.zip s3://$AWS_BUCKET/desktop/osx/TIDAL.$VERSION.zip
-          aws s3 cp s3://$AWS_BUCKET/builds/v$VERSION/$GITHUB_SHA/RELEASES s3://$AWS_BUCKET/desktop/windows/RELEASES --cache-control max-age=300
-          aws s3 cp s3://$AWS_BUCKET/builds/v$VERSION/$GITHUB_SHA/version.json s3://$AWS_BUCKET/desktop/osx/version.json --cache-control max-age=300
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION s3://$AWS_BUCKET/desktop/windows --exclude "*" --include "*.nupkg" --recursive
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/TIDAL.zip s3://$AWS_BUCKET/desktop/osx/TIDAL.$VERSION.zip
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/RELEASES s3://$AWS_BUCKET/desktop/windows/RELEASES --cache-control max-age=300
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/version.json s3://$AWS_BUCKET/desktop/osx/version.json --cache-control max-age=300
