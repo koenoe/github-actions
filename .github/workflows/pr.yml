@@ -15,17 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set app version variable
-        run: |
-          echo ::set-env name=APP_VERSION::$(jq -rc .version package.json)
-
       - name: Generate comment to PR with links to S3 artifacts
         uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: "# Artifacts \n - [TIDAL.dmg](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ github.sha }}/TIDAL.dmg) \n - [TIDAL.exe](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ github.sha }}/TIDAL.exe) \n - [TIDAL.appx](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ github.sha }}/TIDAL.appx) \n - [TIDAL.zip](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ github.sha }}/TIDAL.zip) \n - [TIDAL-${{ env.APP_VERSION }}-full.nupkg](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ github.sha }}/TIDAL-${{ env.APP_VERSION }}-full.nupkg) \n - [version.json](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ github.sha }}/version.json) \n - [RELEASES](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/v${{ env.APP_VERSION }}/${{ github.sha }}/RELEASES)"
+          msg: "# Artifacts \n - [TIDAL.dmg](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/${{ github.sha }}/TIDAL.dmg) \n - [TIDAL.exe](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/${{ github.sha }}/TIDAL.exe) \n - [TIDAL.appx](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/${{ github.sha }}/TIDAL.appx) \n - [TIDAL.zip](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/${{ github.sha }}/TIDAL.zip) \n - [TIDAL-${{ env.APP_VERSION }}-full.nupkg](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/${{ github.sha }}/TIDAL-${{ env.APP_VERSION }}-full.nupkg) \n - [version.json](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/${{ github.sha }}/version.json) \n - [RELEASES](https://${{ env.AWS_BUCKET }}.s3.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.AWS_BUILD_FOLDER }}/${{ github.sha }}/RELEASES)"
           check_for_duplicate_msg: true

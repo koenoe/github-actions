@@ -17,9 +17,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -27,18 +24,14 @@ jobs:
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
-      - name: Set version variable
-        run: |
-          echo ::set-env name=VERSION::$(jq -rc .packageVersion version.json)
-
       - name: Deploy for new users
         run: |
-          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/TIDAL.exe s3://$AWS_BUCKET/desktop/TIDALSetup.exe --cache-control max-age=3600
-          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/TIDAL.dmg s3://$AWS_BUCKET/desktop/TIDAL.dmg --cache-control max-age=3600
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/$GITHUB_SHA/TIDAL.exe s3://$AWS_BUCKET/desktop/TIDALSetup.exe --cache-control max-age=3600
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/$GITHUB_SHA/TIDAL.dmg s3://$AWS_BUCKET/desktop/TIDAL.dmg --cache-control max-age=3600
 
       - name: Deploy for auto update
         run: |
-          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION s3://$AWS_BUCKET/desktop/windows --exclude "*" --include "*.nupkg" --recursive
-          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/TIDAL.zip s3://$AWS_BUCKET/desktop/osx/TIDAL.$VERSION.zip
-          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/RELEASES s3://$AWS_BUCKET/desktop/windows/RELEASES --cache-control max-age=300
-          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/v$VERSION/$GITHUB_SHA/version.json s3://$AWS_BUCKET/desktop/osx/version.json --cache-control max-age=300
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/$GITHUB_SHA s3://$AWS_BUCKET/desktop/windows --exclude "*" --include "*.nupkg" --recursive
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/$GITHUB_SHA/TIDAL.zip s3://$AWS_BUCKET/desktop/osx/TIDAL.$VERSION.zip
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/$GITHUB_SHA/RELEASES s3://$AWS_BUCKET/desktop/windows/RELEASES --cache-control max-age=300
+          aws s3 cp s3://$AWS_BUCKET/$AWS_BUILD_FOLDER/$GITHUB_SHA/version.json s3://$AWS_BUCKET/desktop/osx/version.json --cache-control max-age=300
